@@ -15,6 +15,7 @@ if os.path.exists(libDir):
 def display_message(message):
     # Drawing on the image
     font24 = ImageFont.truetype(os.path.join(resourceDir, 'Font.ttc'), 24)
+    font36 = ImageFont.truetype(os.path.join(resourceDir, 'Font.ttc'), 36)
 
     image = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(image)
@@ -24,7 +25,7 @@ def display_message(message):
     epd.init(epd.PART_UPDATE)
 
     draw.rectangle([(0, 0), (248, 120)], outline=0)
-    draw.text((50, 45), message, font=font24, fill=0)
+    draw.text((50, 45), message, font=font36, fill=0)
 
     image = image.transpose(Image.ROTATE_180)
     epd.displayPartial(epd.getbuffer(image))
@@ -42,6 +43,8 @@ def display_init():
 
 
 def display_cleanup():
+    epd.init(epd.FULL_UPDATE)
+    epd.Clear(0xFF)
     display_sleep()
     epd2in13_V2.epdconfig.module_exit()
 
