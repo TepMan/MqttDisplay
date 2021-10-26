@@ -4,9 +4,13 @@
 # * | Function    :   Hardware underlying interface
 # * | Info        :
 # *----------------
-# * | This version:   V1.0
+# * | Version     :   V1.0
 # * | Date        :   2019-06-21
 # * | Info        :   
+# *----------------
+# * | This version:   forked from V1.0
+# * | Date        :   2021-10-26
+# * | Info        :
 # ******************************************************************************
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documnetation files (the "Software"), to deal
@@ -83,65 +87,10 @@ class RaspberryPi:
         self.SPI.close()
 
         logger.debug("close 5V, Module enters 0 power consumption ...")
-        self.GPIO.output(self.RST_PIN, 0)
-        self.GPIO.output(self.DC_PIN, 0)
-
-        self.GPIO.cleanup()
-
-
-class JetsonNano:
-    # Pin definition
-    RST_PIN         = 17
-    DC_PIN          = 25
-    CS_PIN          = 8
-    BUSY_PIN        = 24
-
-    def __init__(self):
-        import ctypes
-        find_dirs = [
-            os.path.dirname(os.path.realpath(__file__)),
-            '/usr/local/lib',
-            '/usr/lib',
-        ]
-        self.SPI = None
-        for find_dir in find_dirs:
-            so_filename = os.path.join(find_dir, 'sysfs_software_spi.so')
-            if os.path.exists(so_filename):
-                self.SPI = ctypes.cdll.LoadLibrary(so_filename)
-                break
-        if self.SPI is None:
-            raise RuntimeError('Cannot find sysfs_software_spi.so')
-
-        import Jetson.GPIO
-        self.GPIO = Jetson.GPIO
-
-    def digital_write(self, pin, value):
-        self.GPIO.output(pin, value)
-
-    def digital_read(self, pin):
-        return self.GPIO.input(self.BUSY_PIN)
-
-    def delay_ms(self, delaytime):
-        time.sleep(delaytime / 1000.0)
-
-    def spi_writebyte(self, data):
-        self.SPI.SYSFS_software_spi_transfer(data[0])
-
-    def module_init(self):
         self.GPIO.setmode(self.GPIO.BCM)
         self.GPIO.setwarnings(False)
         self.GPIO.setup(self.RST_PIN, self.GPIO.OUT)
         self.GPIO.setup(self.DC_PIN, self.GPIO.OUT)
-        self.GPIO.setup(self.CS_PIN, self.GPIO.OUT)
-        self.GPIO.setup(self.BUSY_PIN, self.GPIO.IN)
-        self.SPI.SYSFS_software_spi_begin()
-        return 0
-
-    def module_exit(self):
-        logger.debug("spi end")
-        self.SPI.SYSFS_software_spi_end()
-
-        logger.debug("close 5V, Module enters 0 power consumption ...")
         self.GPIO.output(self.RST_PIN, 0)
         self.GPIO.output(self.DC_PIN, 0)
 
@@ -151,7 +100,7 @@ class JetsonNano:
 if os.path.exists('/sys/bus/platform/drivers/gpiomem-bcm2835'):
     implementation = RaspberryPi()
 else:
-    implementation = JetsonNano()
+    logger.fatal("Wrong platform detected!")
 
 for func in [x for x in dir(implementation) if not x.startswith('_')]:
     setattr(sys.modules[__name__], func, getattr(implementation, func))

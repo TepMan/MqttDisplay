@@ -6,17 +6,18 @@ from display import display_init, display_message, display_cleanup
 import paho.mqtt.client as mqtt
 
 
-def on_message(client, userdata, message):
+# def on_message(client, userdata, message):
+#
+#     payload = str(message.payload.decode("utf-8"))
+#
+#     logging.info("message received ", payload)
+#     logging.info("message topic=", message.topic)
+#     logging.info("message qos=", message.qos)
+#     logging.info("message retain flag=", message.retain)
 
-    payload = str(message.payload.decode("utf-8"))
 
-    logging.info("message received ", payload)
-    logging.info("message topic=", message.topic)
-    logging.info("message qos=", message.qos)
-    logging.info("message retain flag=", message.retain)
-
-
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 
 try:
     # logging.info("MQTT Client start")
@@ -38,9 +39,9 @@ try:
     # logging.info("exit program")
 
     display_init()
+    logging.info("Display init completed")
 
     while True:
-        # display_message(time.strftime('%H:%M:%S'))
         display_message(time.strftime('%H:%M') + ' Uhr')
         time.sleep(10)
         display_message(time.strftime('%d.%m.%Y'))
@@ -52,7 +53,8 @@ except IOError as e:
 
 except KeyboardInterrupt:
     logging.info("ctrl + c:")
-    logging.info("MQTT Client end")
     display_cleanup()
+    logging.info("Display cleanup completed")
+    logging.info("Program end")
     # client.loop_stop()
     exit()

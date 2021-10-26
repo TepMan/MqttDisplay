@@ -46,5 +46,5 @@ def display_cleanup():
     epd.init(epd.FULL_UPDATE)
     epd.Clear(0xFF)
     display_sleep()
-    epd2in13_V2.epdconfig.module_exit()
+    # epd2in13_V2.epdconfig.module_exit()
 
