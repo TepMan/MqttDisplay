@@ -42,6 +42,8 @@ try:
     logging.info("Display init completed")
 
     while True:
+        # display_message('AAAAAAA')
+        # display_message('   AAAAA   ')
         display_message(time.strftime('%H:%M') + ' Uhr')
         time.sleep(10)
         display_message(time.strftime('%d.%m.%Y'))

@@ -24,8 +24,16 @@ def display_message(message):
     epd.displayPartBaseImage(epd.getbuffer(image))
     epd.init(epd.PART_UPDATE)
 
-    draw.rectangle([(0, 0), (248, 120)], outline=0)
-    draw.text((50, 45), message, font=font36, fill=0)
+    # epd.with ist die Höhe, epd.height ist die Breite!!!
+    middle_width = epd.width / 2
+    middle_height = epd.height / 2
+
+    # draw.rectangle([(0, 0), (248, 120)], outline=0)
+
+    # draw.line([(0, middle_width), (epd.height, middle_width)])
+    # draw.line([(middle_height, 0), (middle_height, epd.height)])
+
+    draw.text((epd.width, middle_width), message, font=font36, fill=0, anchor="mm")
 
     image = image.transpose(Image.ROTATE_180)
     epd.displayPartial(epd.getbuffer(image))
