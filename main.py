@@ -44,9 +44,9 @@ try:
     while True:
         # display_message('AAAAAAA')
         # display_message('   AAAAA   ')
-        display_message(time.strftime('%H:%M') + ' Uhr')
+        display_message(time.strftime('%H:%M') + ' Uhr', 48)
         time.sleep(10)
-        display_message(time.strftime('%d.%m.%Y'))
+        display_message(time.strftime('%d.%m.%Y'), 36)
         time.sleep(10)
 
 

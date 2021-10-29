@@ -12,11 +12,8 @@ if os.path.exists(libDir):
     sys.path.append(libDir)
 
 
-def display_message(message):
-    # Drawing on the image
-    font24 = ImageFont.truetype(os.path.join(resourceDir, 'Font.ttc'), 24)
-    font36 = ImageFont.truetype(os.path.join(resourceDir, 'Font.ttc'), 36)
-
+def display_message(message, fontsize):
+    font = ImageFont.truetype(os.path.join(resourceDir, 'Font.ttc'), fontsize)
     image = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(image)
 
@@ -33,7 +30,7 @@ def display_message(message):
     # draw.line([(0, middle_width), (epd.height, middle_width)])
     # draw.line([(middle_height, 0), (middle_height, epd.height)])
 
-    draw.text((epd.width, middle_width), message, font=font36, fill=0, anchor="mm")
+    draw.text((epd.width, middle_width), message, font=font, fill=0, anchor="mm")
 
     image = image.transpose(Image.ROTATE_180)
     epd.displayPartial(epd.getbuffer(image))
