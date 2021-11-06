@@ -10,7 +10,7 @@ from queue import Queue
 mq = Queue()
 
 # logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 
 # Create MQTT-Client
 mqtt_client = mqtt.Client("StatusPI")
