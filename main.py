@@ -37,7 +37,7 @@ try:
     mqtt_client.connect(host="raspi4", port=1883, keepalive=60)
     logging.debug("Client connected")
 
-    mqtt_client.subscribe("iob/#")
+    mqtt_client.subscribe("iob/0_userdata/0/mqtt_messages/info")
     logging.debug("Client subscribed")
 
     mqtt_client.loop_start()
