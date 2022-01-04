@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import logging
 import time
-from display import display_init, display_message, display_cleanup
+from display import display_init, display_message, display_cleanup, display_sleep
 import paho.mqtt.client as mqtt
 from queue import Queue
 
@@ -53,6 +53,7 @@ try:
             time.sleep(5)
             display_message(time.strftime('%H:%M') + ' Uhr', 48)
             time.sleep(5)
+            display_init()
 
 
 except IOError as e:
