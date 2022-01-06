@@ -9,6 +9,7 @@ from queue import Queue
 # MessageQueue anlegen
 mq = Queue()
 
+# logging.basicConfig(level=logging.INFO)
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.ERROR)
 
@@ -19,7 +20,7 @@ mqtt_client = mqtt.Client("StatusPI")
 def on_message(client, userdata, raw_msg):
     payload = str(raw_msg.payload.decode("utf-8"))
     mq.put(payload)
-    logging.info("Message: " + payload)
+    logging.debug("Message: " + payload)
 
 
 def on_log(client, userdata, level, buf):
@@ -27,15 +28,19 @@ def on_log(client, userdata, level, buf):
 
 
 try:
+    do_update = False
+    run_cnt = 0
+    refresh_every = 3
+
     display_init()
     logging.debug("Display init completed")
 
     mqtt_client.on_message = on_message
     mqtt_client.on_log = on_log
-    logging.debug("MQTT Client started")
+    logging.info("MQTT Client started")
 
     mqtt_client.connect(host="raspi4", port=1883, keepalive=60)
-    logging.debug("Client connected")
+    logging.info("Client connected")
 
     mqtt_client.subscribe("iob/0_userdata/0/mqtt_messages/info")
     logging.debug("Client subscribed")
@@ -44,16 +49,24 @@ try:
     logging.debug("Client loop startes")
 
     while True:
+
         while not mq.empty():
             message = mq.get()
             if message is None:
                 continue
+            run_cnt += 1
+            logging.info("Run: " + str(run_cnt))
+
             logging.info("Output: " + message)
             display_message(message, 36)
-            time.sleep(5)
+            time.sleep(10)
+
             display_message(time.strftime('%H:%M') + ' Uhr', 48)
-            time.sleep(5)
-            display_init()
+            time.sleep(10)
+
+            if run_cnt % refresh_every == 0:
+                logging.info("Display-Refresh")
+                display_init()
 
 
 except IOError as e:
