@@ -62,11 +62,11 @@ try:
             time.sleep(10)
 
             display_message(time.strftime('%H:%M') + ' Uhr', 48)
-            time.sleep(10)
+            time.sleep(15)
 
-            if run_cnt % refresh_every == 0:
-                logging.info("Display-Refresh")
-                display_init()
+            # if run_cnt % refresh_every == 0:
+            #     logging.info("Display-Refresh")
+            #     display_init()
 
 
 except IOError as e:
