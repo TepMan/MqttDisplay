@@ -28,10 +28,6 @@ def on_log(client, userdata, level, buf):
 
 
 try:
-    do_update = False
-    run_cnt = 0
-    refresh_every = 3
-
     display_init()
     logging.debug("Display init completed")
 
@@ -46,7 +42,7 @@ try:
     logging.debug("Client subscribed")
 
     mqtt_client.loop_start()
-    logging.debug("Client loop startes")
+    logging.debug("Client loop starts...")
 
     while True:
 
@@ -54,19 +50,16 @@ try:
             message = mq.get()
             if message is None:
                 continue
-            run_cnt += 1
-            logging.info("Run: " + str(run_cnt))
 
             logging.info("Output: " + message)
+
+            display_init()
+
             display_message(message, 36)
-            time.sleep(10)
+            time.sleep(15)
 
             display_message(time.strftime('%H:%M') + ' Uhr', 48)
             time.sleep(15)
-
-            # if run_cnt % refresh_every == 0:
-            #     logging.info("Display-Refresh")
-            #     display_init()
 
 
 except IOError as e:

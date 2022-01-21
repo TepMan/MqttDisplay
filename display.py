@@ -17,7 +17,7 @@ def display_message(message, fontsize):
     image = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(image)
 
-    epd.init(epd.FULL_UPDATE)
+    # epd.init(epd.FULL_UPDATE)
     epd.displayPartBaseImage(epd.getbuffer(image))
     epd.init(epd.PART_UPDATE)
 
